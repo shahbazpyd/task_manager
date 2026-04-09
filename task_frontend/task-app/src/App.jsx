@@ -5,6 +5,7 @@ function App() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tasks, setTasks] = useState([]);
+  
 
   const inputHandler = (e) => {
     if (e.target.name === "title") {
@@ -42,6 +43,23 @@ function App() {
     getTasks();
   }, []);
 
+const changeStatus = async (e) => {
+  const taskId = e.target.id;
+  const task = tasks.find((t) => t.id === parseInt(taskId));
+  const newStatus = task.status === "pending" ? "completed" : "pending";
+
+  await fetch(`http://localhost:8000/api/tasks/${taskId}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...task, status: newStatus }),
+  })
+    .then((response) => response.json())
+    .then((data) => console.log("Task updated:", data))
+    .catch((error) => console.error("Error:", error));
+
+  getTasks();
+};
+
   return (
     <>
       <nav>
@@ -73,20 +91,28 @@ function App() {
         </div>
 
         <div className="task-list">
-          <h3>Task List</h3>
-          {tasks.length > 0 ? (
-            <ul>
+          <table>
+            <thead>
+              <tr>
+                <th>Done</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
               {tasks.map((task) => (
-                <li key={task.id}>
-                  <input type="checkbox" id="scales" name="scales" />
-                  <h4>{task.title}</h4>
-                  <p>{task.description}</p>
-                </li>
+                <tr key={task.id}>
+                  <td>
+                    <input type="checkbox" id={task.id} name="scales" checked={task.status === "completed"} onChange={changeStatus} />
+                  </td>
+                  <td>{task.id}</td>
+                  <td> <b>{task.title}</b></td>
+                  <td>{task.description}</td>
+                </tr>
               ))}
-            </ul>
-          ) : (
-            <p>No tasks available.</p>
-          )}
+            </tbody>  
+          </table>
         </div>
       </div>
     </>
