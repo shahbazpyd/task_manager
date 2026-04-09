@@ -144,21 +144,23 @@ function App() {
             <tbody>
               {tasks.map((task) => (
                 <tr key={task.id}>
-                  <td>
+                  <td>{ task.status == "deleted" ? <input type="checkbox" disabled checked /> :
                     <input
                       type="checkbox"
                       id={task.id}
                       name="scales"
-                      checked={task.status === "completed"}
+                      checked={task.status === "completed" || task.status === "deleted"}
                       onChange={changeStatus}
                     />
+                  }
                   </td>
                   <td>{task.id}</td>
                   <td>
                     {task.status === "deleted" ? <del>{task.title}</del> : <b>{task.title}</b>}
                   </td>
                   <td>{task.status === "deleted" ? <del>{task.description}</del> : <p>{task.description}</p>}</td>
-                  <td>
+                  <td>{task.status !== "deleted" &&
+                  <div>
                     <button
                       onClick={() => {
                         setTitle(task.title);
@@ -168,9 +170,12 @@ function App() {
                     >
                       Update
                     </button>
+
                     <button onClick={() => deleteHandler(task.id)}>
                       Delete
                     </button>
+                    </div>
+}
                   </td>
                 </tr>
               ))}
