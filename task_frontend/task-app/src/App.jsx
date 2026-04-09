@@ -159,9 +159,9 @@ function App() {
                     {task.status === "deleted" ? <del>{task.title}</del> : <b>{task.title}</b>}
                   </td>
                   <td>{task.status === "deleted" ? <del>{task.description}</del> : <p>{task.description}</p>}</td>
-                  <td>{task.status !== "deleted" &&
+                  <td>
                   <div>
-                    <button
+                    <button {...task.status == "deleted" && {disabled: true}}
                       onClick={() => {
                         setTitle(task.title);
                         setDescription(task.description);
@@ -171,11 +171,11 @@ function App() {
                       Update
                     </button>
 
-                    <button onClick={() => deleteHandler(task.id)}>
+                    <button {...task.status == "deleted" && {disabled: true}}  onClick={() => deleteHandler(task.id)}>
                       Delete
                     </button>
                     </div>
-}
+
                   </td>
                 </tr>
               ))}
