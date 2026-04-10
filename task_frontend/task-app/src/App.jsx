@@ -117,6 +117,7 @@ function App() {
               onChange={inputHandler}
               required
             />
+            <div className="button-container">
             <button type="submit">{editingTaskId ? "Update" : "Add"}</button>
             <button
               onClick={() => {
@@ -127,10 +128,12 @@ function App() {
             >
               Cancel
             </button>
+            </div>
           </form>
         </div>
 
         <div className="task-list">
+          <h3>Task List</h3>
           <table>
             <thead>
               <tr>
@@ -160,7 +163,7 @@ function App() {
                   </td>
                   <td>{task.status === "deleted" ? <del>{task.description}</del> : <p>{task.description}</p>}</td>
                   <td>
-                  <div>
+                  <div className="button-container">
                     <button {...task.status == "deleted" && {disabled: true}}
                       onClick={() => {
                         setTitle(task.title);
